@@ -22,6 +22,9 @@ class User:
     """
 
     id: str
+    username: str
+    is_agent: bool
+    is_admin: bool
     # TODO: Compléter avec les attributs manquants
     # - username ?
     # - is_agent ? is_admin ?
