@@ -1,9 +1,3 @@
-"""
-Entité User (utilisateur du système).
-
-TODO (TD01) : Compléter cette classe avec les attributs nécessaires.
-"""
-
 from dataclasses import dataclass
 
 
@@ -23,8 +17,5 @@ class User:
 
     id: str
     username: str
-    is_agent: bool
-    is_admin: bool
-    # TODO: Compléter avec les attributs manquants
-    # - username ?
-    # - is_agent ? is_admin ?
+    is_agent: bool = False
+    is_admin: bool = False
