@@ -1,5 +1,7 @@
 # Ticketing Starter 🎫 Module R4.01 Architecture logicielle (BUT2)
 
+**Etudiant:** Gabriel GOURDON
+
 Année 2025/2026 - Enseignant : Marc Ennaji (marc.ennaji@univ-rennes.fr)
 
 > **Template de démarrage** pour le projet pédagogique R4.01 — Architecture hexagonale
