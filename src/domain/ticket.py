@@ -50,6 +50,10 @@ class Ticket:
     def assign(self, user_id: str):
         self.assignee_id = user_id
 
+    def __post_init__(self):
+        if not self.title:
+            raise ValueError("Ticket title cannot be empty.")
+
     # TODO: Ajouter les attributs manquants
     # - status (avec valeur par défaut Status.OPEN)
     # - creator_id
