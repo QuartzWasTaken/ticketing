@@ -64,6 +64,8 @@ class Ticket:
     def __post_init__(self):
         if not self.title.strip():
             raise ValueError("Ticket title cannot be empty.")
+        if not self.creator_id.strip():
+            raise ValueError("Username cannot be empty.")
 
     def close(self):
         self.transition_to(

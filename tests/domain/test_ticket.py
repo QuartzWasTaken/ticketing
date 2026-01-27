@@ -96,3 +96,63 @@ def test_ticket_title_cannot_be_empty():
     """Règle : Un ticket doit avoir un titre non vide."""
     with pytest.raises(ValueError):
         ticket = Ticket(id="t1", title="", description="desc", creator_id="u1")
+
+
+def test_ticket_title_cannot_be_all_spaces():
+    """Règle : Un ticket doit avoir un titre qui ne soit pas que des espaces."""
+    with pytest.raises(ValueError):
+        ticket = Ticket(
+            id="t1",
+            title="                          ",
+            description="desc",
+            creator_id="u1",
+        )
+
+
+def test_ticket_username_cannot_be_empty():
+    """Règle : Un ticket doit avoir un titre non vide."""
+    with pytest.raises(ValueError):
+        ticket = Ticket(id="t1", title="Test Title", description="desc", creator_id="")
+
+
+def test_ticket_cannot_modify_closed_ticket_status_by_reassigning():
+    """Règle : Un ticket doit avoir un titre non vide."""
+    ticket = Ticket(id="t1", title="Test", description="desc", creator_id="u1")
+    ticket.start()
+    ticket.resolve()
+    ticket.close()
+
+    with pytest.raises(ValueError):
+        ticket.assign("Zebi")
+
+
+def test_ticket_respects_given_order():
+    """Règle : Un ticket doit avoir un titre non vide."""
+    ticket = Ticket(id="t1", title="Test", description="desc", creator_id="u1")
+    ticket.start()
+    ticket.resolve()
+    ticket.close()
+    ticket.transition_to(Status.IN_PROGRESS, _now_utc())
+    ticket.resolve()
+    ticket.transition_to(Status.IN_PROGRESS, _now_utc())
+
+
+def test_ticket_cannot_go_from_open_to_resolved():
+    ticket = Ticket(id="t1", title="Test", description="desc", creator_id="u1")
+    with pytest.raises(ValueError):
+        ticket.resolve()
+
+
+def test_ticket_cannot_be_assigned_without_agent_id():
+    ticket = Ticket(id="t1", title="Test", description="desc", creator_id="u1")
+    with pytest.raises(TypeError):
+        ticket.assign()
+
+
+def test_ticket_cannot_be_created_without_the_creator():
+    with pytest.raises(TypeError):
+        ticket = Ticket(id="t1", title="Test", description="desc")
+
+
+def test_ticket_cannot_modify_immutable_properties_after_creation():
+    ticket = Ticket(id="t1", title="Test", description="desc", creator_id="u1")
