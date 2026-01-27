@@ -15,4 +15,16 @@ Des informations détaillées sur le problème, la date et l'heure ou il s'est p
     - CLOSED → fermé définitivement
 
 - Quels rôles un utilisateur peut-il prendre ?
+
 Demandeur, Gestionnaire et Administrateur
+
+- Quelles règles métier sont présentes ?
+
+    - Un ticket doit avoir un titre non vide
+    - Un utilisateur doit avoir un username non vide
+    - Un ticket fermé ne peut plus être assigné
+    - Un ticket déjà fermé ne peut pas être re-fermé
+    - Un ticket ouvert ne peut que passer en status "en cours"
+    - Un ticket en cours ne peut pas repasser en mode "ouvert"
+    - Un ticket 
+

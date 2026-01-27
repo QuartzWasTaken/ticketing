@@ -8,7 +8,7 @@ C'est l'entité centrale du domaine métier.
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
-from status import Status
+from src.domain.status import Status
 
 
 def _now_utc() -> datetime:
@@ -41,11 +41,19 @@ class Ticket:
     id: str
     title: str
     description: str
-    status: Status = Status.OPEN
     creator_id: str
     assignee_id: str = None
+    _status: Status = Status.OPEN
     created_at: datetime = _now_utc()
     updated_at: datetime = _now_utc()
+
+    # Transitions autorisées
+    ALLOWED_TRANSITIONS = {
+        Status.OPEN: [Status.IN_PROGRESS],
+        Status.IN_PROGRESS: [Status.RESOLVED],
+        Status.RESOLVED: [Status.CLOSED, Status.IN_PROGRESS],
+        Status.CLOSED: [Status.IN_PROGRESS],
+    }
 
     def assign(self, user_id: str):
         self.assignee_id = user_id
@@ -54,17 +62,28 @@ class Ticket:
         if not self.title:
             raise ValueError("Ticket title cannot be empty.")
 
-    # TODO: Ajouter les attributs manquants
-    # - status (avec valeur par défaut Status.OPEN)
-    # - creator_id
-    # - assignee_id (optionnel)
-    # - created_at, updated_at (dates)
+    def close(self, closed_at: datetime):
+        self.transition_to(
+            Status.CLOSED, closed_at
+        )  # Valide automatiquement la transition
+        self.closed_at = closed_at
 
-    # TODO: Ajouter les méthodes métier
-    # def assign(self, user_id: str):
-    #     """Assigne le ticket à un agent."""
-    #     pass
-    #
-    # def close(self):
-    #     """Ferme le ticket."""
-    #     pass
+    def start(self, started_at: datetime):
+        self.transition_to(Status.IN_PROGRESS, started_at)
+        self.updated_at = started_at
+
+    def resolve(self, resolved_at: datetime):
+        self.transition_to(Status.RESOLVED, resolved_at)
+
+    def transition_to(self, new_status: Status, updated_at: datetime) -> None:
+        """Fait transiter le ticket vers un nouveau statut."""
+        if new_status not in self.ALLOWED_TRANSITIONS.get(self._status, []):
+            raise ValueError(
+                f"Cannot transition from {self._status.value} to {new_status.value}"
+            )
+        self._status = new_status
+        self.updated_at = updated_at
+
+    @property
+    def status(self) -> Status:
+        return self._status
