@@ -154,5 +154,7 @@ def test_ticket_cannot_be_created_without_the_creator():
         ticket = Ticket(id="t1", title="Test", description="desc")
 
 
-def test_ticket_cannot_modify_immutable_properties_after_creation():
+def test_ticket_cannot_assign_unknown_statuses():
     ticket = Ticket(id="t1", title="Test", description="desc", creator_id="u1")
+    with pytest.raises(AttributeError):
+        ticket.transition_to("TEST", _now_utc())
