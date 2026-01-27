@@ -56,24 +56,26 @@ class Ticket:
     }
 
     def assign(self, user_id: str):
+        if self.status == Status.CLOSED:
+            raise ValueError("Trying to assign a closed ticket!")
+        self.transition_to(Status.IN_PROGRESS, _now_utc())
         self.assignee_id = user_id
 
     def __post_init__(self):
-        if not self.title:
+        if not self.title.strip():
             raise ValueError("Ticket title cannot be empty.")
 
-    def close(self, closed_at: datetime):
+    def close(self):
         self.transition_to(
-            Status.CLOSED, closed_at
+            Status.CLOSED, _now_utc()
         )  # Valide automatiquement la transition
-        self.closed_at = closed_at
+        self.closed_at = _now_utc()
 
-    def start(self, started_at: datetime):
-        self.transition_to(Status.IN_PROGRESS, started_at)
-        self.updated_at = started_at
+    def start(self):
+        self.transition_to(Status.IN_PROGRESS, _now_utc())
 
-    def resolve(self, resolved_at: datetime):
-        self.transition_to(Status.RESOLVED, resolved_at)
+    def resolve(self):
+        self.transition_to(Status.RESOLVED, _now_utc())
 
     def transition_to(self, new_status: Status, updated_at: datetime) -> None:
         """Fait transiter le ticket vers un nouveau statut."""

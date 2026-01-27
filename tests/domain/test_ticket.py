@@ -68,25 +68,31 @@ def test_ticket_assign():
 
 def test_cannot_assign_closed_ticket():
     """Règle : Un ticket fermé ne peut plus être assigné."""
-    # TODO: Implémenter ce test
     ticket = Ticket(id="t1", title="Test", description="desc", creator_id="u1")
-    ticket.start(_now_utc())
+    ticket.start()
 
     assert ticket.status == Status.IN_PROGRESS
 
-    ticket.close(_now_utc())
+    ticket.resolve()
+
+    ticket.close()
 
     with pytest.raises(ValueError):
-        ticket.transition_to(Status.OPEN, _now_utc())
+        ticket.assign("JeanMichelNomTresLongPourPouvoirAssign")
 
 
 def test_cannot_close_already_closed_ticket():
     """Règle : Un ticket déjà fermé ne peut pas être re-fermé."""
-    # TODO: Implémenter ce test
-    pass
+    ticket = Ticket(id="t1", title="Test", description="desc", creator_id="u1")
+    ticket.start()
+    ticket.resolve()
+    ticket.close()
+
+    with pytest.raises(ValueError):
+        ticket.close()
 
 
 def test_ticket_title_cannot_be_empty():
     """Règle : Un ticket doit avoir un titre non vide."""
-    # TODO: Implémenter ce test
-    pass
+    with pytest.raises(ValueError):
+        ticket = Ticket(id="t1", title="", description="desc", creator_id="u1")
