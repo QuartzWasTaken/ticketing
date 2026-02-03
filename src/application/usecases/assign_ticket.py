@@ -50,6 +50,7 @@ class AssignTicketUseCase:
         Ticket.assign(tik, agent_id)
 
         # TODO: Sauvegarder le ticket modifié
+        self.repo.save(tik)
 
         # TODO: Retourner le ticket mis à jour
-        pass
+        return tik
