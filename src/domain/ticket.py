@@ -8,6 +8,7 @@ C'est l'entité centrale du domaine métier.
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
+from src.domain.priority import Priority
 from src.domain.status import Status
 
 
@@ -42,6 +43,7 @@ class Ticket:
     title: str
     description: str
     creator_id: str
+    priority: Priority
     assignee_id: str = None
     _status: Status = Status.OPEN
     created_at: datetime = _now_utc()
