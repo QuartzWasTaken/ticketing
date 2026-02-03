@@ -43,7 +43,7 @@ class AssignTicketUseCase:
         tik = self.repo.get_by_id(ticket_id)
 
         # TODO: Vérifier que le ticket existe (lever TicketNotFoundError sinon)
-        if tik is not None:
+        if tik is None:
             raise TicketNotFoundError
 
         # TODO: Appeler la méthode assign() du ticket avec agent_id
