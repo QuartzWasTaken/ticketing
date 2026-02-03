@@ -15,3 +15,9 @@ class DomainError(Exception):
     """
 
     pass
+
+
+class TicketNotFoundError(Exception):
+    """Levée quand un ticket demandé n'existe pas."""
+
+    pass
