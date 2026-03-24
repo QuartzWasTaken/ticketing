@@ -69,7 +69,8 @@ def test_ticket_assign():
 def test_cannot_assign_closed_ticket():
     """Règle : Un ticket fermé ne peut plus être assigné."""
     ticket = Ticket(id="t1", title="Test", description="desc", creator_id="u1")
-    ticket.start()
+    ticket.assign("agent1")
+    ticket.start("agent1", _now_utc())
 
     assert ticket.status == Status.IN_PROGRESS
 
@@ -84,7 +85,8 @@ def test_cannot_assign_closed_ticket():
 def test_cannot_close_already_closed_ticket():
     """Règle : Un ticket déjà fermé ne peut pas être re-fermé."""
     ticket = Ticket(id="t1", title="Test", description="desc", creator_id="u1")
-    ticket.start()
+    ticket.assign("agent1")
+    ticket.start("agent1", _now_utc())
     ticket.resolve()
     ticket.close()
 
@@ -118,7 +120,8 @@ def test_ticket_username_cannot_be_empty():
 def test_ticket_cannot_modify_closed_ticket_status_by_reassigning():
     """Règle : Un ticket doit avoir un titre non vide."""
     ticket = Ticket(id="t1", title="Test", description="desc", creator_id="u1")
-    ticket.start()
+    ticket.assign("agent1")
+    ticket.start("agent1", _now_utc())
     ticket.resolve()
     ticket.close()
 
@@ -129,7 +132,8 @@ def test_ticket_cannot_modify_closed_ticket_status_by_reassigning():
 def test_ticket_respects_given_order():
     """Règle : Un ticket doit avoir un titre non vide."""
     ticket = Ticket(id="t1", title="Test", description="desc", creator_id="u1")
-    ticket.start()
+    ticket.assign("agent1")
+    ticket.start("agent1", _now_utc())
     ticket.resolve()
     ticket.close()
     ticket.transition_to(Status.IN_PROGRESS, _now_utc())
