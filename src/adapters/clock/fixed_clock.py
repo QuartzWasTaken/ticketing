@@ -4,7 +4,7 @@ Adaptateur test pour l'horodatage.
 Retourne une heure fixe pour les tests (déterministe).
 """
 
-from datetime import datetime, timezone
+from datetime import datetime
 
 from src.ports.clock import Clock
 

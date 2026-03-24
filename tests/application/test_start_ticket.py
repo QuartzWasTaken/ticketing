@@ -5,8 +5,9 @@ Ces tests vérifient que le use case orchestre correctement
 le domaine (validation métier), le port Clock et le repository.
 """
 
-import pytest
 from datetime import datetime, timezone
+
+import pytest
 
 from src.adapters.clock.fixed_clock import FixedClock
 from src.adapters.db.ticket_repository_inmemory import InMemoryTicketRepository
@@ -28,11 +29,11 @@ class TestStartTicketUseCase:
     def setup_method(self):
         """Initialise le repository, l'horloge et les use cases."""
         self.repo = InMemoryTicketRepository()
-        
+
         # Horloge fixe pour les tests (déterministe)
         self.fixed_time = datetime(2026, 1, 16, 14, 30, 0, tzinfo=timezone.utc)
         self.clock = FixedClock(self.fixed_time)
-        
+
         # Use cases
         self.create_use_case = CreateTicketUseCase(self.repo)
         self.assign_use_case = AssignTicketUseCase(self.repo)
@@ -118,11 +119,12 @@ class TestStartTicketUseCase:
         assert persisted_ticket.started_at == self.fixed_time
 
     def test_start_ticket_deterministic_with_fixed_clock(self):
-        """Doit être déterministe avec FixedClock (même timestamp à chaque exécution)."""
+        """Doit être déterministe avec FixedClock
+        (même timestamp à chaque exécution)."""
         # Arrange - Créer plusieurs tickets
         agents = ["agent-1", "agent-2", "agent-3"]
         tickets = []
-        
+
         for i, agent in enumerate(agents):
             ticket = self.create_use_case.execute(
                 f"Bug {i}", f"Description {i}", "user-123"
