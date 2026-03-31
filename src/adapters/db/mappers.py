@@ -10,6 +10,7 @@ from datetime import datetime
 from src.domain.priority import Priority
 from src.domain.status import Status
 from src.domain.ticket import Ticket
+from src.domain.user import User
 
 
 def ticket_to_row(ticket: Ticket) -> dict:
@@ -74,3 +75,23 @@ def row_to_ticket(row: dict) -> Ticket:
     setattr(ticket, "closed_at", closed_at)
 
     return ticket
+
+
+def user_to_row(user: User) -> dict:
+    """Convertit une entite User en dictionnaire pour SQLite."""
+    return {
+        "id": user.id,
+        "username": user.username,
+        "is_agent": 1 if user.is_agent else 0,
+        "is_admin": 1 if user.is_admin else 0,
+    }
+
+
+def row_to_user(row: dict) -> User:
+    """Convertit une ligne SQL en entite User."""
+    return User(
+        id=row["id"],
+        username=row["username"],
+        is_agent=bool(row["is_agent"]),
+        is_admin=bool(row["is_admin"]),
+    )
